@@ -78,6 +78,8 @@ This project builds a complete **data preparation and exploratory data analysis 
 ```
 Loan_Approval_Data_Analysis/
 ├── loan_approval_analysis.R      # full R script
+├── data/                         # put loan_approval_dataset.csv here (not committed)
+├── output/                       # EDA plots saved by the script (not committed)
 ├── report/
 │   ├── Loan_Approval_EDA_Report_Group7.pdf
 │   └── Loan_Approval_EDA_Report_Group7.docx
@@ -88,14 +90,16 @@ Loan_Approval_Data_Analysis/
 ---
 
 ## ▶️ How to Run
-1. Download the dataset from [Kaggle](https://www.kaggle.com/datasets/architsharma01/loan-approval-prediction-dataset).
-2. Open `loan_approval_analysis.R` in RStudio.
-3. Update the file path in `read.csv()` to where you saved `loan_approval_dataset.csv`.
-4. Install the packages once:
-   ```r
-   install.packages(c("tidyverse", "ggplot2", "caret", "dplyr", "naniar", "VIM", "caTools"))
-   ```
-5. Run the script from top to bottom.
+1. Download `loan_approval_dataset.csv` from [Kaggle](https://www.kaggle.com/datasets/architsharma01/loan-approval-prediction-dataset) and put it in the `data/` folder.
+   - Keeping it somewhere else? Set the `LOAN_DATA_PATH` environment variable to the full file path instead.
+2. Open `loan_approval_analysis.R` in RStudio and set the working directory to the project folder (or run it from a terminal, see below).
+3. Run the script from top to bottom. Any missing packages (`tidyverse`, `caret`, `naniar`, `VIM`, `caTools`) are installed automatically on the first run.
+4. The EDA plots are shown on screen and also saved as PNG files in the `output/` folder.
+
+From a terminal, in the project folder:
+```bash
+Rscript loan_approval_analysis.R
+```
 
 ---
 

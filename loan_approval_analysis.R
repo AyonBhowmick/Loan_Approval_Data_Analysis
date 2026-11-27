@@ -3,23 +3,32 @@
 # Introduction to Data Science, Group 07
 # ============================================================
 
-# ---------- 1. Installing Required Packages (run once) ----------
-# install.packages(c("tidyverse", "ggplot2", "caret", "dplyr", "naniar", "VIM", "caTools"))
+# ---------- 1. Installing Required Packages ----------
+# Installs only the packages that are missing, then loads them all.
+# (tidyverse already includes ggplot2 and dplyr.)
+required_packages <- c("tidyverse", "caret", "naniar", "VIM", "caTools")
 
-library(tidyverse)
-library(ggplot2)
-library(caret)
-library(dplyr)
-library(naniar)
-library(VIM)
-library(caTools)
+missing_packages <- setdiff(required_packages, rownames(installed.packages()))
+if (length(missing_packages) > 0) {
+  install.packages(missing_packages)
+}
+
+invisible(lapply(required_packages, library, character.only = TRUE))
 
 
 # ---------- 2. Loading the Dataset ----------
 # FIX: point to the CSV file itself (not the folder), and strip the leading
 # spaces that this Kaggle file has in its text values (" Approved", " Graduate").
-df <- read.csv("C:/PROJECT/PROJECT/archive/loan_approval_dataset.csv",
-               stringsAsFactors = FALSE, strip.white = TRUE)
+# The path can be overridden with the LOAN_DATA_PATH environment variable;
+# by default the CSV is expected at data/loan_approval_dataset.csv.
+data_path <- Sys.getenv("LOAN_DATA_PATH", "data/loan_approval_dataset.csv")
+
+if (!file.exists(data_path)) {
+  stop("Dataset not found at '", data_path, "'. Download loan_approval_dataset.csv ",
+       "from Kaggle and place it in the data/ folder, or set LOAN_DATA_PATH.")
+}
+
+df <- read.csv(data_path, stringsAsFactors = FALSE, strip.white = TRUE)
 
 names(df) <- trimws(names(df))                       # clean column names too
 df[] <- lapply(df, function(x) if (is.character(x)) trimws(x) else x)
@@ -169,49 +178,66 @@ df %>%
 
 
 # ---------- 16. Exploratory Data Analysis ----------
+# Every plot is shown and also saved as a PNG in the output/ folder.
+output_dir <- "output"
+dir.create(output_dir, showWarnings = FALSE)
+
+show_and_save <- function(plot, file_name) {
+  print(plot)   # explicit print so plots also render when the script is source()d
+  ggsave(file.path(output_dir, file_name), plot, width = 8, height = 5, dpi = 120)
+}
+
 # Readable labels for the plots
 df$status_label <- factor(df$loan_status, levels = c(0, 1), labels = c("Rejected", "Approved"))
 
 # 16.1 Loan status count
-ggplot(df, aes(x = status_label, fill = status_label)) +
+p <- ggplot(df, aes(x = status_label, fill = status_label)) +
   geom_bar() +
   labs(title = "Loan Approval Count", x = "Loan Status", y = "Count", fill = "Loan Status")
+show_and_save(p, "01_loan_status_count.png")
 
 # 16.2 Income distribution
-ggplot(df, aes(income_annum)) +
+p <- ggplot(df, aes(income_annum)) +
   geom_histogram(fill = "purple", bins = 30) +
   labs(title = "Income Distribution", x = "Annual Income", y = "Count")
+show_and_save(p, "02_income_distribution.png")
 
 # 16.3 Income vs loan status
-ggplot(df, aes(x = status_label, y = income_annum, fill = status_label)) +
+p <- ggplot(df, aes(x = status_label, y = income_annum, fill = status_label)) +
   geom_boxplot() +
   labs(title = "Income vs Loan Status", x = "Loan Status", y = "Annual Income", fill = "Loan Status")
+show_and_save(p, "03_income_vs_loan_status.png")
 
 # 16.4 CIBIL score vs loan status
-ggplot(df, aes(x = status_label, y = cibil_score, fill = status_label)) +
+p <- ggplot(df, aes(x = status_label, y = cibil_score, fill = status_label)) +
   geom_boxplot() +
   labs(title = "CIBIL Score vs Loan Status", x = "Loan Status", y = "CIBIL Score", fill = "Loan Status")
+show_and_save(p, "04_cibil_score_vs_loan_status.png")
 
 # 16.5 Dot plot of income
-ggplot(df, aes(x = income_annum)) +
+p <- ggplot(df, aes(x = income_annum)) +
   geom_dotplot(binwidth = 50000, fill = "blue") +
   labs(title = "Dot Plot of Income", x = "Annual Income")
+show_and_save(p, "05_dot_plot_of_income.png")
 
 # 16.6 Density plot of income
-ggplot(df, aes(x = income_annum)) +
+p <- ggplot(df, aes(x = income_annum)) +
   geom_density(fill = "green", alpha = 0.5) +
   labs(title = "Density Plot of Income", x = "Annual Income", y = "Density")
+show_and_save(p, "06_density_plot_of_income.png")
 
 # 16.7 Income vs loan amount
-ggplot(df, aes(x = income_annum, y = loan_amount)) +
+p <- ggplot(df, aes(x = income_annum, y = loan_amount)) +
   geom_point(color = "red", alpha = 0.5) +
   labs(title = "Income vs Loan Amount", x = "Annual Income", y = "Loan Amount")
+show_and_save(p, "07_income_vs_loan_amount.png")
 
 # 16.8 Education vs loan status
-ggplot(df, aes(x = factor(education, levels = c(1, 2), labels = c("Graduate", "Not Graduate")),
+p <- ggplot(df, aes(x = factor(education, levels = c(1, 2), labels = c("Graduate", "Not Graduate")),
                fill = status_label)) +
   geom_bar(position = "dodge") +
   labs(title = "Education vs Loan Status", x = "Education", y = "Count", fill = "Loan Status")
+show_and_save(p, "08_education_vs_loan_status.png")
 
 # 16.9 Loan approval distribution (pie)
 loan_counts <- table(df$status_label)
@@ -220,6 +246,7 @@ pie(loan_counts, col = c("tomato", "seagreen"),
     main = "Loan Approval Distribution")
 
 # 16.10 Income distribution by loan status
-ggplot(df, aes(x = status_label, y = income_annum, fill = status_label)) +
+p <- ggplot(df, aes(x = status_label, y = income_annum, fill = status_label)) +
   geom_violin() +
   labs(title = "Income Distribution by Loan Status", x = "Loan Status", y = "Annual Income", fill = "Loan Status")
+show_and_save(p, "10_income_distribution_by_loan_status.png")
