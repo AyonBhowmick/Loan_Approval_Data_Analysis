@@ -3,16 +3,17 @@
 # Introduction to Data Science, Group 07
 # ============================================================
 
-# ---------- 1. Installing Required Packages (run once) ----------
-# install.packages(c("tidyverse", "ggplot2", "caret", "dplyr", "naniar", "VIM", "caTools"))
+# ---------- 1. Installing Required Packages ----------
+# Installs only the packages that are missing, then loads them all.
+# (tidyverse already includes ggplot2 and dplyr.)
+required_packages <- c("tidyverse", "caret", "naniar", "VIM", "caTools")
 
-library(tidyverse)
-library(ggplot2)
-library(caret)
-library(dplyr)
-library(naniar)
-library(VIM)
-library(caTools)
+missing_packages <- setdiff(required_packages, rownames(installed.packages()))
+if (length(missing_packages) > 0) {
+  install.packages(missing_packages)
+}
+
+invisible(lapply(required_packages, library, character.only = TRUE))
 
 
 # ---------- 2. Loading the Dataset ----------
