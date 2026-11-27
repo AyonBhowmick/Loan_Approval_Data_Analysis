@@ -19,8 +19,16 @@ invisible(lapply(required_packages, library, character.only = TRUE))
 # ---------- 2. Loading the Dataset ----------
 # FIX: point to the CSV file itself (not the folder), and strip the leading
 # spaces that this Kaggle file has in its text values (" Approved", " Graduate").
-df <- read.csv("C:/PROJECT/PROJECT/archive/loan_approval_dataset.csv",
-               stringsAsFactors = FALSE, strip.white = TRUE)
+# The path can be overridden with the LOAN_DATA_PATH environment variable;
+# by default the CSV is expected at data/loan_approval_dataset.csv.
+data_path <- Sys.getenv("LOAN_DATA_PATH", "data/loan_approval_dataset.csv")
+
+if (!file.exists(data_path)) {
+  stop("Dataset not found at '", data_path, "'. Download loan_approval_dataset.csv ",
+       "from Kaggle and place it in the data/ folder, or set LOAN_DATA_PATH.")
+}
+
+df <- read.csv(data_path, stringsAsFactors = FALSE, strip.white = TRUE)
 
 names(df) <- trimws(names(df))                       # clean column names too
 df[] <- lapply(df, function(x) if (is.character(x)) trimws(x) else x)
