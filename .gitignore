@@ -1,0 +1,16 @@
+# R session files
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj
+
+# Dataset (download it from Kaggle, see README)
+data/*.csv
+
+# Generated plots
+output/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
