@@ -58,19 +58,32 @@ This project builds a complete **data preparation and exploratory data analysis 
 
 ---
 
-## 📈 Sample Visualizations
-| Income Distribution | Income vs Loan Amount |
+## 📈 Key Visualizations
+| Loan Approval Count | CIBIL Score vs Loan Status |
 |---|---|
+| <img src="images/loan_approval_count.png" width="100%"/> | <img src="images/cibil_vs_loan_status.png" width="100%"/> |
+
+| Income vs Loan Status | Education vs Loan Status |
+|---|---|
+| <img src="images/income_vs_loan_status.png" width="100%"/> | <img src="images/education_vs_loan_status.png" width="100%"/> |
+
+| Income vs Loan Amount | Income Distribution |
+|---|---|
+| <img src="images/income_vs_loan_amount.png" width="100%"/> | <img src="images/income_distribution.png" width="100%"/> |
+
+## 🔍 Key Findings
+- **About 62% of applications are approved** and 38% rejected, so the target is moderately imbalanced.
+- **CIBIL score is the strongest factor:** the median score is about **710 for approved** applicants vs about **430 for rejected** ones.
+- **Income barely differs** between approved and rejected applicants, so income alone does not decide approval.
+- **Education has little effect:** graduates and non-graduates have very similar approval counts.
+- **Loan amount rises with income**, showing a strong positive relationship.
+
+---|---|
 | <img src="images/income_distribution.png" width="100%"/> | <img src="images/income_vs_loan_amount.png" width="100%"/> |
 
 | Income Density | Outlier Check (Boxplot) |
 |---|---|
 | <img src="images/income_density.png" width="100%"/> | <img src="images/income_outliers_boxplot.png" width="100%"/> |
-
-**Key observations**
-- Annual income is spread fairly evenly across its range.
-- Loan amount rises steadily with income, showing a strong positive relationship.
-- No extreme income values remain after IQR filtering.
 
 ---
 
@@ -78,8 +91,6 @@ This project builds a complete **data preparation and exploratory data analysis 
 ```
 Loan_Approval_Data_Analysis/
 ├── loan_approval_analysis.R      # full R script
-├── data/                         # put loan_approval_dataset.csv here (not committed)
-├── output/                       # EDA plots saved by the script (not committed)
 ├── report/
 │   ├── Loan_Approval_EDA_Report_Group7.pdf
 │   └── Loan_Approval_EDA_Report_Group7.docx
@@ -90,16 +101,14 @@ Loan_Approval_Data_Analysis/
 ---
 
 ## ▶️ How to Run
-1. Download `loan_approval_dataset.csv` from [Kaggle](https://www.kaggle.com/datasets/architsharma01/loan-approval-prediction-dataset) and put it in the `data/` folder.
-   - Keeping it somewhere else? Set the `LOAN_DATA_PATH` environment variable to the full file path instead.
-2. Open `loan_approval_analysis.R` in RStudio and set the working directory to the project folder (or run it from a terminal, see below).
-3. Run the script from top to bottom. Any missing packages (`tidyverse`, `caret`, `naniar`, `VIM`, `caTools`) are installed automatically on the first run.
-4. The EDA plots are shown on screen and also saved as PNG files in the `output/` folder.
-
-From a terminal, in the project folder:
-```bash
-Rscript loan_approval_analysis.R
-```
+1. Download the dataset from [Kaggle](https://www.kaggle.com/datasets/architsharma01/loan-approval-prediction-dataset).
+2. Open `loan_approval_analysis.R` in RStudio.
+3. Update the file path in `read.csv()` to where you saved `loan_approval_dataset.csv`.
+4. Install the packages once:
+   ```r
+   install.packages(c("tidyverse", "ggplot2", "caret", "dplyr", "naniar", "VIM", "caTools"))
+   ```
+5. Run the script from top to bottom.
 
 ---
 
@@ -112,14 +121,16 @@ The full project report covers every step with code, outputs, and figures.
 </p>
 
 **Contents:** Introduction, Dataset Description, Data Issues, Data Cleaning & Preparation (15 steps), Descriptive Statistics, Exploratory Data Analysis, Conclusion, and Future Work.
+
 ---
 
 ## 👥 Team
 | Name | Contribution |
 |---|---|
-| Ayon Kumar Bhowmick Ovi | 33.4% |
-| Dipu Roy | 33.3% |
-| Sumiya Haider Risa | 33.3% |
+| Ayon Kumar Bhowmick Ovi | 35% |
+| Sheikh MD. Atik Shahoriyer Badhon | 25% |
+| Dipu Roy | 20% |
+| Sumiya Haider Risa | 20% |
 
 **Supervisor:** Kamrun Naher Koli
 
