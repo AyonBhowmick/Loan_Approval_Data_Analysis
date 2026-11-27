@@ -100,8 +100,14 @@ Loan_Approval_Data_Analysis/
 ---
 
 ## 📄 Report
-The full project report is in [`report/`](report/).
+The full project report covers every step with code, outputs, and figures.
 
+<p>
+  <a href="report/Loan_Approval_EDA_Report_Group7.pdf"><img src="https://img.shields.io/badge/View%20Report-PDF-D32F2F?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="View PDF Report"/></a>
+  <a href="report/Loan_Approval_EDA_Report_Group7.docx"><img src="https://img.shields.io/badge/Download%20Report-Word-2B579A?style=for-the-badge&logo=microsoftword&logoColor=white" alt="Download Word Report"/></a>
+</p>
+
+**Contents:** Introduction, Dataset Description, Data Issues, Data Cleaning & Preparation (15 steps), Descriptive Statistics, Exploratory Data Analysis, Conclusion, and Future Work.
 ---
 
 ## 👥 Team
